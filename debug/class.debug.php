@@ -1,14 +1,22 @@
 <?php
-include('constant.debug.php');
-class Pabana_Debug {
-	private $arbDebugShow;
-	private $arbDebugFile;
-	private $arbDebugDatabase;
-	private $bDebugBacktrace;
-	private $bDebugVariable;
-	private $sDebugFile;
-	private $cnxDebugDatabase;
-	private $arsErrorLevel = array(
+namespace Pabana\Debug;
+
+class Debug {
+	const PE_ALL = -1;
+	const PE_DEBUG = 1;
+	const PE_INFO = 2;
+	const PE_DEPRECATED = 4;
+	const PE_WARNING = 8;
+	const PE_ERROR = 16;
+	const PE_CRITICAL = 32;
+	/**
+     * Instance of Pabana_Debug
+     * @static
+     * @var Pabana_Debug
+     */
+    static private $_oPabanaDebug;
+	
+	private $_arsErrorLevel = array(
 		1 => 'DEBUG',
 		2 => 'INFO',
 		4 => 'DEPRECATED',
@@ -16,26 +24,56 @@ class Pabana_Debug {
 		16 => 'ERROR',
 		32 => 'CRITICAL'
 	);
+	private $_arbShowLevel;
+	private $_bBacktrace;
+	private $_bEnvironment;
+	private $_bAutoloader;
+	private $_bFatalException;
+	private $_armError;
+	private $_armBacktrace;
+	private $_armEnvironment;
 	
-	public function __construct($nDebugShow = 0, $nDebugFile = 0, $nDebugDatabase = 0, $bDebugEnvironment = true, $bDebugBacktrace = true, $bDebugLink = true) {
-		$this->arbDebugShow = $this->getIntToArrayDebug($nDebugShow);
-		$this->arbDebugFile = $this->getIntToArrayDebug($nDebugFile);
-		$this->arbDebugDatabase = $this->getIntToArrayDebug($nDebugDatabase);
-		$this->bDebugEnvironment = $bDebugEnvironment;
-		$this->bDebugBacktrace = $bDebugBacktrace;
-		$this->bDebugLink = $bDebugLink;
+	public function __construct() {
+		$this->_arbShowLevel = $this->_getIntToArrayDebug(self::PE_ALL);
+		$this->_bBacktrace = true;
+		$this->_bEnvironment = true;
+		$this->_bAutoloader = false;
+		$this->_bFatalException = false;
     }
 	
-	public function setDebugFile($sDebugFile) {
-		$this->sDebugFile = $sDebugFile;
+	/**
+     * Singleton of class
+     * @return Pabana_Debug
+     */
+    public static function getInstance() {
+        if(!isset(self::$_oPabanaDebug)) {
+            self::$_oPabanaDebug = new \Pabana\Debug\Debug();
+		}
+        return self::$_oPabanaDebug;
+    }
+
+    public function getFatalException() {
+    	return $this->_bFatalException;
+    }
+
+    public function setAutoloader($bAutoloader) {
+    	$this->_bAutoloader = $bAutoloader;
+    }
+	
+	public function setShowLevel($nShowLevel) {
+		$this->_arbShowLevel = $this->_getIntToArrayDebug($nShowLevel);
+	}
+
+	public function setEnvironment($bEnvironment) {
+		$this->_bEnvironment = $bEnvironment;
+	}
+
+	public function setBacktrace($bBacktrace) {
+		$this->_bBacktrace = $bBacktrace;
 	}
 	
-	public function setDebugDatabase($cnxDebugDatabase) {
-		$this->cnxDebugDatabase = $cnxDebugDatabase;
-	}
-	
-	private function getIntToArrayDebug($nDebugLevel) {
-		$arsErrorLevel = $this->arsErrorLevel;
+	private function _getIntToArrayDebug($nDebugLevel) {
+		$arsErrorLevel = $this->_arsErrorLevel;
 		$arbErrorLevelReturn = $arsErrorLevel;
 		krsort($arsErrorLevel);
 		foreach($arsErrorLevel as $nKeyErrorLevel => $sValueErrorLevel) {
@@ -53,106 +91,106 @@ class Pabana_Debug {
 	}
 	
 	public function exception($nErrorLevel = 1, $sErrorCode = 'UNKNOW', $sErrorMessage = 'Unknow error') {
-		$oHttp = new Pabana_Http();
-		$this->armError = array(
+		$this->_armError = array(
 			'level' => $nErrorLevel,
 			'code' => $sErrorCode,
 			'message' => $sErrorMessage
 		); 
-		$this->armBackTrace = debug_backtrace();
-		$this->armEnvironment = array(
+		$this->_armBackTrace = debug_backtrace();
+		$this->_armEnvironment = array(
 			'date' => date('Y/m/d H:i:s'),
 			'memory' => round(memory_get_usage() / 1000000, 3),
-			'generation' => round(microtime(true) - $GLOBALS['pabanaInternalStorage']['pabana']['startTime'], 4)
+			'generation' => round(microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'], 4)
 		);
-		if($this->arbDebugShow[$nErrorLevel] == true) {
-			if(PH_CONSOLE == true || $oHttp->isAjax()) {
-				echo $this->exceptionText();
-			} else {
-				echo $this->exceptionHtml();
+		if($this->_arbShowLevel[$nErrorLevel] == true) {
+			$bIsAjax = false;
+			if($this->_bAutoloader == true) {
+				$oHttp = new Pabana_Http();
+				$bIsAjax = $oHttp->isAjax();
 			}
-		}
-		if($this->arbDebugFile[$nErrorLevel] == true) {
-			if(!empty($this->sDebugFile)) {
-				$sExceptionText = $this->exceptionText();
-				file_put_contents($this->sDebugFile, $sExceptionText, FILE_APPEND);
+			if(PHP_SAPI == 'cli' || $bIsAjax === true) {
+				echo $this->_exceptionText();
 			} else {
-				$this->arbDebugFile = 0;
-				$this->exception(8, 'DEBUG_FILE', 'It\'s impossible to Log error in file cause log file isn\'t defined');
+				echo $this->_exceptionHtml();
 			}
 		}
 		// Stop application if error level is ERROR or CRITICAL
 		if($nErrorLevel >= 16) {
-			$GLOBALS['pabanaInternalStorage']['pabana']['fatalException'] = 1;
+			$this->_bFatalException = true;
 			exit(1);
 		}
     }
 	
-	private function exceptionText() {
-		$sErrorMessage = str_replace('<br />', PHP_EOL, $this->armError['message']);
+	private function _exceptionText() {
+		$sErrorMessage = str_replace('<br />', PHP_EOL, $this->_armError['message']);
 		$sErrorMessage = strip_tags($sErrorMessage);
-		$sReturnText = $this->arsErrorLevel[$this->armError['level']] . ': ';
+		$sReturnText = $this->_arsErrorLevel[$this->_armError['level']] . ': ';
 		$sReturnText .= $sErrorMessage . ' ';
-		$sReturnText .= '(Error code : ' . $this->armError['code'] .')' . PHP_EOL;
-		$sReturnText .= 'Class: ' . $this->armBackTrace[1]['class'] . ' ';
-		$sReturnText .= 'on method ' . $this->armBackTrace[1]['function'] . PHP_EOL;
-		if(isset($this->armBackTrace[1]['file'])) {
-			$sReturnText .= 'File: ' . $this->armBackTrace[1]['file'] . ' ';
-			$sReturnText .= 'on line ' . $this->armBackTrace[1]['line'] . PHP_EOL;
+		$sReturnText .= '(Error code : ' . $this->_armError['code'] .')' . PHP_EOL;
+		$sReturnText .= 'Class: ' . $this->_armBackTrace[1]['class'] . ' ';
+		$sReturnText .= 'on method ' . $this->_armBackTrace[1]['function'] . PHP_EOL;
+		if(isset($this->_armBackTrace[1]['file'])) {
+			$sReturnText .= 'File: ' . $this->_armBackTrace[1]['file'] . ' ';
+			$sReturnText .= 'on line ' . $this->_armBackTrace[1]['line'] . PHP_EOL;
 		}
-		if($this->bDebugEnvironment == true) {
-			$sReturnText .= 'Date: ' . $this->armEnvironment['date'] . ' | ';
-			$sReturnText .= 'Memory usage: ' . $this->armEnvironment['memory'] . 'Mo | ';
-			$sReturnText .= 'Generation time: ' . $this->armEnvironment['generation'] . 's' . PHP_EOL;
+		if($this->_bEnvironment == true) {
+			$sReturnText .= 'Date: ' . $this->_armEnvironment['date'] . ' | ';
+			$sReturnText .= 'Memory usage: ' . $this->_armEnvironment['memory'] . 'Mo | ';
+			$sReturnText .= 'Generation time: ' . $this->_armEnvironment['generation'] . 's' . PHP_EOL;
 		}
 		$sReturnText .= PHP_EOL;
 		return $sReturnText;
     }
 	
-	private function exceptionHtml() {
-		$sErrorUrl = 'http://pabana.co/documentation/error/err_id/' . $this->armError['code'];
+	private function _exceptionHtml() {
+		$sErrorUrl = 'http://pabana.co/documentation/error/err_id/' . $this->_armError['code'] . '/ver_name/' . PC_DOC_VERSION;
 		$sCssStyle = 'border: 1px solid; margin: 10px; padding: 10px; border-radius: 5px; font-size: 14px; font-weight:normal; text-transformation:none; font-family:verdana;';
-		if($this->armError['level'] >= 16) {
+		if($this->_armError['level'] >= 16) {
 			$sCssStyle .= ' color: #D8000C; background-color: #FFBABA;';
 		}
-		elseif($this->armError['level'] >= 4) {
+		elseif($this->_armError['level'] >= 4) {
 			$sCssStyle .= ' color: #9F6000; background-color: #FEEFB3;';
 		}
 		else {
 			$sCssStyle .= ' color: #00529B; background-color: #BDE5F8;';
 		}
 		$sReturnText = '<p style="'.$sCssStyle.'">';
-		$sReturnText .= '<strong>' . $this->arsErrorLevel[$this->armError['level']] . ':</strong> ';
-		$sReturnText .= $this->armError['message'] . ' ';
-		$sReturnText .= '(Error code : <a href="'.$sErrorUrl.'" target="_blank" title="Pabana online documentation">' . $this->armError['code'] .'</a>)<br />';
-		$sReturnText .= 'Class : <strong>' . $this->armBackTrace[1]['class'] . '</strong> ';
-		$sReturnText .= 'on method  <strong>' . $this->armBackTrace[1]['function'] . '</strong><br />';
-		if(isset($this->armBackTrace[1]['file'])) {
-			$sReturnText .= 'File : <strong>' . $this->armBackTrace[1]['file'] . '</strong> ';
-			$sReturnText .= 'on line <strong>' . $this->armBackTrace[1]['line'] . '</strong><br />';
+		$sReturnText .= '<strong>' . $this->_arsErrorLevel[$this->_armError['level']] . ':</strong> ';
+		$sReturnText .= $this->_armError['message'] . ' ';
+		$sReturnText .= '(Error code : <a href="'.$sErrorUrl.'" target="_blank" title="Pabana online documentation">' . $this->_armError['code'] .'</a>)<br />';
+		$sReturnText .= 'Class : <strong>' . $this->_armBackTrace[1]['class'] . '</strong> ';
+		$sReturnText .= 'on method  <strong>' . $this->_armBackTrace[1]['function'] . '</strong><br />';
+		if(isset($this->_armBackTrace[1]['file'])) {
+			$sReturnText .= 'File : <strong>' . $this->_armBackTrace[1]['file'] . '</strong> ';
+			$sReturnText .= 'on line <strong>' . $this->_armBackTrace[1]['line'] . '</strong><br />';
 		}
-		if($this->bDebugEnvironment == true) {
-			$sReturnText .= 'Memory usage : ' . $this->armEnvironment['memory'] . 'Mo | ';
-			$sReturnText .= 'Generation time : ' . $this->armEnvironment['generation'] . 's<br />';
+		if($this->_bEnvironment == true) {
+			$sReturnText .= 'Memory usage : <strong>' . $this->_armEnvironment['memory'] . 'Mo</strong> | ';
+			$sReturnText .= 'Generation time : <strong>' . $this->_armEnvironment['generation'] . 's</strong><br />';
 		}
-		if($this->bDebugBacktrace == true) {
+		if($this->_bBacktrace == true) {
 			$sReturnText .= '<br /><strong>Backtrace:</strong><br />';
-			$nCountBacktrace = count($this->armBackTrace);
-			for($i = 1; $i < $nCountBacktrace; $i++) {
-				$sReturnText .= '#' . $i . ' ';
-				if(!empty($this->armBackTrace[$i]['class'])) {
-					$sReturnText .= $this->armBackTrace[$i]['class'];
+			$nCountBacktrace = count($this->_armBackTrace);
+			$j = 1;
+			for($i = ($nCountBacktrace - 1); $i >= 1; $i--) {
+				$sReturnText .= '#' . $j . '] ';
+				if(!empty($this->_armBackTrace[$i]['class'])) {
+					$sReturnText .= $this->_armBackTrace[$i]['class'];
 				}
-				if(!empty($this->armBackTrace[$i]['type'])) {
-					$sReturnText .= $this->armBackTrace[$i]['type'];
+				if(!empty($this->_armBackTrace[$i]['type'])) {
+					$sReturnText .= $this->_armBackTrace[$i]['type'];
 				}
-				if(!empty($this->armBackTrace[$i]['function'])) {
-					$sReturnText .= $this->armBackTrace[$i]['function'];
+				if(!empty($this->_armBackTrace[$i]['function'])) {
+					$sReturnText .= $this->_armBackTrace[$i]['function'];
 				}
-				if(!empty($this->armBackTrace[$i]['args'])) {
-					$sReturnText .= '(' . print_r($this->armBackTrace[$i]['args'], true) .')';
+				if(!empty($this->_armBackTrace[$i]['args'])) {
+					$sReturnText .= '(' . print_r($this->_armBackTrace[$i]['args'], true) .')';
 				}
-				$sReturnText .= ' called at [' . $this->armBackTrace[$i]['file'] . ':' . $this->armBackTrace[$i]['line'] . ']<br />';
+				if(isset($this->_armBackTrace[$i]['file'])) {
+					$sReturnText .= ' called at [' . $this->_armBackTrace[$i]['file'] . ':' . $this->_armBackTrace[$i]['line'] . ']';
+				}
+				$sReturnText .= '<br />';
+				$j++;
 			}
 		}
 		$sReturnText .= '</p>';

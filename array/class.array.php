@@ -1,64 +1,106 @@
 <?php
-Class Pabana_Dom {
-	private $oPabanaDebug;
-	private $_sDoctype;
-	private $_sLanguage;
-	private $_arsMeta = array();
-	private $_arsLink = array();
+Class Pabana_Array {
+	private $_armArray;
+
+	public function __construct() { 
+		$this->_armArray = array();
+	}
 	
-	public function __construct() {
-		$this->_sDoctype = 'HTML5';
-		$this->_sLanguage = substr(setlocale(LC_ALL, '0'), 0, 2);
-		$this->_sCharset = 'UTF-8';
-		$this->_sTitle = 'Pabana - ';
+	public function mergeDom($oDom) {
+		$this->arsDoctypes = array_merge($this->arsDoctypes, $oDom->getDoctypes());
+		$this->arsCharsets = array_merge($this->arsCharsets, $oDom->getCharsets());
+		$this->arsTitles = array_merge($this->arsTitles, $oDom->getTitles());
+		$this->arsLinks = array_merge($this->arsLinks, $oDom->getLinks());
+		$this->arsMetas = array_merge($this->arsMetas, $oDom->getMetas());
+		$this->arsScripts = array_merge($this->arsScripts, $oDom->getScripts());
+	}
+	
+	/*
+	Getter
+	*/
+	public function getDoctypes() {
+		return $this->arsDoctypes;
+	}
+	
+	public function getCharsets() {
+		return $this->arsCharsets;
+	}
+	
+	public function getTitles() {
+		return $this->arsTitles;
+	}
+	
+	public function getLinks() {
+		return $this->arsLinks;
+	}
+	
+	public function getMetas() {
+		return $this->arsMetas;
+	}
+	
+	public function getScripts() {
+		return $this->arsScripts;
 	}
 	
 	/* 
 	Doctype 
 	*/
 	public function setDoctype($sDoctype) {
-		$this->_sDoctype = strtoupper($sDoctype);
+		$this->arsDoctypes[] = array(
+			'type' => 'set',
+			'value' => strtoupper($sDoctype)
+		);
 	}
 	
 	public function getDoctype() {
-		if($this->_sDoctype == 'HTML5') {
+		$sDoctype = 'HTML5';
+		foreach($this->arsDoctypes as $arsDoctype) {
+			if($arsDoctype['type'] == 'set') {
+				$sDoctype = $arsDoctype['value'];
+			}
+		}
+		if($sDoctype == 'HTML5') {
 			return '<!DOCTYPE html>' . PHP_EOL;
-		} else if($this->_sDoctype == 'XHTML11') {
+		} else if($sDoctype == 'XHTML11') {
 			return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">' . PHP_EOL;
-		} else if($this->_sDoctype == 'XHTML1_STRICT') {
+		} else if($sDoctype == 'XHTML1_STRICT') {
 			return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . PHP_EOL;
-		} else if($this->_sDoctype == 'XHTML1_TRANSITIONAL') {
+		} else if($sDoctype == 'XHTML1_TRANSITIONAL') {
 			return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . PHP_EOL;
-		} else if($this->_sDoctype == 'XHTML1_FRAMESET') {
+		} else if($sDoctype == 'XHTML1_FRAMESET') {
 			return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">' . PHP_EOL;
-		} else if($this->_sDoctype == 'HTML4_STRICT') {
+		} else if($sDoctype == 'HTML4_STRICT') {
 			return '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">' . PHP_EOL;
-		} else if($this->_sDoctype == 'HTML4_LOOSE') {
+		} else if($sDoctype == 'HTML4_LOOSE') {
 			return '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' . PHP_EOL;
-		} else if($this->_sDoctype == 'HTML4_FRAMESET') {
+		} else if($sDoctype == 'HTML4_FRAMESET') {
 			return '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">' . PHP_EOL;
 		}
-	}
-
-	/* 
-	Language 
-	*/
-	public function setLanguage($sLanguage) {
-		$this->_sLanguage = $sLanguage;
-	}
-	
-	public function getLanguage() {
-		return $this->_sLanguage;
 	}
 	
 	/* 
 	Charset 
 	*/
 	public function setCharset($sCharset) {
-		$this->_sCharset = strtoupper($sCharset);
+		$this->arsCharsets[] = array(
+			'type' => 'set',
+			'value' => strtoupper($sCharset)
+		);
 	}
 	
 	public function getCharset() {
+		$sDoctype = 'HTML5';
+		foreach($this->arsDoctypes as $arsDoctype) {
+			if($arsDoctype['type'] == 'set') {
+				$sDoctype = $arsDoctype['value'];
+			}
+		}
+		$sCharset = 'UTF-8';
+		foreach($this->arsCharsets as $arsCharset) {
+			if($arsCharset['type'] == 'set') {
+				$sCharset = $arsCharset['value'];
+			}
+		}
 		$arsCharset = array(
 			'UTF-8' => 'utf-8',
 			'UTF-16' => 'utf-16',
@@ -76,16 +118,16 @@ Class Pabana_Dom {
 			'MACROMAN' => 'x-mac-roman'
 		);
 		$arsKeyCharset = array_keys($arsCharset);
-		if(!in_array($this->_sCharset, $arsKeyCharset)) {
-			$this->oPabanaDebug->exception(PE_ERROR, 'DOM_CHARSET_NAME', 'Charset ' . $this->_sCharset . ' isn\'t defined');
+		if(!in_array($sCharset, $arsKeyCharset)) {
+			$this->oPabanaDebug->exception(PE_ERROR, 'DOM_CHARSET_NAME', 'Charset ' . $sCharset . ' isn\'t defined');
 		} else {
-			if($this->_sDoctype == 'HTML5') {
-				return '<meta charset="' . $arsCharset[$this->_sCharset] . '">' . PHP_EOL;
+			if($sDoctype == 'HTML5') {
+				return '<meta charset="' . $arsCharset[$sCharset] . '">' . PHP_EOL;
 			} else {
-				if(substr($this->_sDoctype, 0, 1) == 'X') {
-					return '<meta http-equiv="Content-Type" content="text/html; charset=' . $arsCharset[$this->_sCharset] . '" />' . PHP_EOL;
+				if(substr($sDoctype, 0, 1) == 'X') {
+					return '<meta http-equiv="Content-Type" content="text/html; charset=' . $arsCharset[$sCharset] . '" />' . PHP_EOL;
 				} else {
-					return '<meta http-equiv="Content-Type" content="text/html; charset=' . $arsCharset[$this->_sCharset] . '">' . PHP_EOL;
+					return '<meta http-equiv="Content-Type" content="text/html; charset=' . $arsCharset[$sCharset] . '">' . PHP_EOL;
 				}
 			}
 		}
@@ -95,26 +137,45 @@ Class Pabana_Dom {
 	Title
 	*/
 	public function setTitle($sTitle) {
-		$this->_sTitle = $sTitle;
+		$this->arsTitles[] = array(
+			'type' => 'set',
+			'value' => $sTitle
+		);
 	}
 	
 	public function appendTitle($sTitle) {
-		$this->_sTitle .= $sTitle;
+		$this->arsTitles[] = array(
+			'type' => 'append',
+			'value' => $sTitle
+		);
 	}
 	
 	public function prependTitle($sTitle) {
-		$this->_sTitle = $sTitle . $this->_sTitle;
+		$this->arsTitles[] = array(
+			'type' => 'prepend',
+			'value' => $sTitle
+		);
 	}
 	
 	public function getTitle() {
-		return '<title>' . $this->_sTitle . '</title>' . PHP_EOL;
+		$sTitle = '';
+		foreach($this->arsTitles as $arsTitle) {
+			if($arsTitle['type'] == 'prepend') {
+				$sTitle = $arsTitle['value'] . $sTitle;
+			} else if($arsTitle['type'] == 'set') {
+				$sTitle = $arsTitle['value'];
+			} else if($arsTitle['type'] == 'append') {
+				$sTitle .= $arsTitle['value'];
+			}
+		}
+		return '<title>' . $sTitle . '</title>' . PHP_EOL;
 	}
 	
 	/*
 	Link head
 	*/
-	public function appendLinkFile($sLinkPath, $sRel = 'stylesheet', $arsAttribs = array()) {
-		$this->_arsLink[] = array(
+	public function appendFileLink($sLinkPath, $sRel = 'stylesheet', $arsAttribs = array()) {
+		$this->arsLinks[] = array(
 			'type' => 'append',
 			'path' => $sLinkPath,
 			'rel' => $sRel,
@@ -123,8 +184,8 @@ Class Pabana_Dom {
 		return $this;
 	}
 	
-	public function offsetLinkFile($nOffset, $sLinkPath, $sRel = 'stylesheet', $arsAttribs = array()) {
-		$this->_arsLink[] = array(
+	public function offsetFileLink($nOffset, $sLinkPath, $sRel = 'stylesheet', $arsAttribs = array()) {
+		$this->arsLinks[] = array(
 			'type' => 'offset',
 			'offset' => $nOffset,
 			'path' => $sLinkPath,
@@ -134,8 +195,8 @@ Class Pabana_Dom {
 		return $this;
 	}
 	
-	public function prependLinkFile($sLinkPath, $sRel = 'stylesheet', $arsAttribs = array()) {
-		$this->_arsLink[] = array(
+	public function prependFileLink($sLinkPath, $sRel = 'stylesheet', $arsAttribs = array()) {
+		$this->arsLinks[] = array(
 			'type' => 'prepend',
 			'path' => $sLinkPath,
 			'rel' => $sRel,
@@ -146,8 +207,7 @@ Class Pabana_Dom {
 	
 	public function getLink() {
 		$armSortLinks = array();
-		$armLinks = $this->_arsLink;
-		foreach($armLinks as $arsLink) {
+		foreach($this->arsLinks as $arsLink) {
 			if($arsLink['type'] == 'prepend') {
 				array_unshift($armSortLinks, $arsLink);
 			} else if($arsLink['type'] == 'offset') {
@@ -174,8 +234,8 @@ Class Pabana_Dom {
 	/*
 	Script
 	*/
-	public function appendScriptFile($sScriptPath, $sMimeType = 'text/javascript', $arsAttribs = array()) {
-		$this->_arsScript[] = array(
+	public function appendFileScript($sScriptPath, $sMimeType = 'text/javascript', $arsAttribs = array()) {
+		$this->arsScripts[] = array(
 			'type' => 'append',
 			'file' => true,
 			'path' => $sScriptPath,
@@ -185,8 +245,8 @@ Class Pabana_Dom {
 		return $this;
 	}
 	
-	public function offsetScriptFile($nOffset, $sScriptPath, $sMimeType = 'text/javascript', $arsAttribs = array()) {
-		$this->_arsScript[] = array(
+	public function offsetFileScript($nOffset, $sScriptPath, $sMimeType = 'text/javascript', $arsAttribs = array()) {
+		$this->arsScripts[] = array(
 			'type' => 'offset',
 			'offset' => $nOffset,
 			'file' => true,
@@ -197,8 +257,8 @@ Class Pabana_Dom {
 		return $this;
 	}
 	
-	public function prependScriptFile($sScriptPath, $sMimeType = 'text/javascript', $arsAttribs = array()) {
-		$this->_arsScript[] = array(
+	public function prependFileScript($sScriptPath, $sMimeType = 'text/javascript', $arsAttribs = array()) {
+		$this->arsScripts[] = array(
 			'type' => 'prepend',
 			'file' => true,
 			'path' => $sScriptPath,
@@ -209,7 +269,7 @@ Class Pabana_Dom {
 	}
 	
 	public function appendScript($sScript, $sMimeType = 'text/javascript', $arsAttribs = array()) {
-		$this->_arsScript[] = array(
+		$this->arsScripts[] = array(
 			'type' => 'append',
 			'file' => false,
 			'script' => $sScript,
@@ -220,7 +280,7 @@ Class Pabana_Dom {
 	}
 	
 	public function offsetScript($nOffset, $sScript, $sMimeType = 'text/javascript', $arsAttribs = array()) {
-		$this->_arsScript[] = array(
+		$this->arsScripts[] = array(
 			'type' => 'offset',
 			'offset' => $nOffset,
 			'file' => false,
@@ -232,7 +292,7 @@ Class Pabana_Dom {
 	}
 	
 	public function prependScript($sScript, $sMimeType = 'text/javascript', $arsAttribs = array()) {
-		$this->_arsScript[] = array(
+		$this->arsScripts[] = array(
 			'type' => 'prepend',
 			'file' => false,
 			'script' => $sScript,
@@ -244,8 +304,7 @@ Class Pabana_Dom {
 	
 	public function getScript() {
 		$armSortScripts = array();
-		$arsScripts = $this->_arsScript;
-		foreach($arsScripts as $arsScript) {
+		foreach($this->arsScripts as $arsScript) {
 			if($arsScript['type'] == 'prepend') {
 				array_unshift($armSortScripts, $arsScript);
 			} else if($arsScript['type'] == 'offset') {
@@ -278,7 +337,7 @@ Class Pabana_Dom {
 	Meta
 	*/
 	public function appendMeta($sName, $sContent) {
-		$this->_arsMeta[] = array(
+		$this->arsMetas[] = array(
 			'type' => 'append',
 			'type_meta' => 'name',
 			'name' => $sName,
@@ -288,7 +347,7 @@ Class Pabana_Dom {
 	}
 	
 	public function offsetMeta($nOffset, $sName, $sContent) {
-		$this->_arsMeta[] = array(
+		$this->arsMetas[] = array(
 			'type' => 'offset',
 			'offset' => $nOffset,
 			'type_meta' => 'name',
@@ -299,7 +358,7 @@ Class Pabana_Dom {
 	}
 	
 	public function prependMeta($sName, $sContent) {
-		$this->_arsMeta[] = array(
+		$this->arsMetas[] = array(
 			'type' => 'prepend',
 			'type_meta' => 'name',
 			'name' => $sName,
@@ -309,7 +368,7 @@ Class Pabana_Dom {
 	}
 	
 	public function appendHttpEquiv($sName, $sContent) {
-		$this->_arsMeta[] = array(
+		$this->arsMetas[] = array(
 			'type' => 'append',
 			'type_meta' => 'http-equiv',
 			'name' => $sName,
@@ -319,7 +378,7 @@ Class Pabana_Dom {
 	}
 	
 	public function offsetHttpEquiv($nOffset, $sName, $sContent) {
-		$this->_arsMeta[] = array(
+		$this->arsMetas[] = array(
 			'type' => 'http-equiv',
 			'offset' => $nOffset,
 			'type_meta' => 'name',
@@ -330,7 +389,7 @@ Class Pabana_Dom {
 	}
 	
 	public function prependHttpEquiv($sName, $sContent) {
-		$this->_arsMeta[] = array(
+		$this->arsMetas[] = array(
 			'type' => 'prepend',
 			'type_meta' => 'http-equiv',
 			'name' => $sName,
@@ -341,15 +400,14 @@ Class Pabana_Dom {
 	
 	public function getMeta() {
 		$armSortMetas = array();
-		$arsMetas = $this->_arsMeta;
-		foreach($arsMetas as $arsMeta) {
+		foreach($this->arsMetas as $arsMeta) {
 			if($arsMeta['type'] == 'prepend') {
 				array_unshift($armSortMetas, $arsMeta);
 			} else if($arsMeta['type'] == 'offset') {
 				$nOffset = $arsMeta['offset'];
 				$armSortMetas[$nOffset] = $arsMeta;
 			} else if($arsMeta['type'] == 'append') {
-                $armSortMetas[] = $arsMeta;
+				$armSortMetas[] = $arsMeta;
 			}
 		}
 		$arsHtmlMeta = '';
@@ -358,19 +416,5 @@ Class Pabana_Dom {
 		}
 		return $arsHtmlMeta;
 	}
-    
-    /* URL */
-    public function url($sController, $sAction = '', $arsParam = array()) {
-        $sReturn = '/' . $sController;
-        if(!empty($sAction)) {
-            $sReturn .= '/' . $sAction;
-        }
-        if(!empty($arsParam)) {
-            foreach($arsParam as $sParamName => $sParamValue) {
-                $sReturn .= '/' . $sParamName . '/' . $sParamValue;
-            }
-        }
-        return $sReturn;
-    }
 }
 ?>

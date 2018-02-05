@@ -102,8 +102,15 @@ class Pabana_File {
 		return basename($this->sFilePath);
 	}
 	
-	public function getSize() {
-		return filesize($this->sFilePath);
+	public function getSize($bHumanReadable = false) {
+		$nFileSize = filesize($this->sFilePath);
+		if($bHumanReadable === true) {
+			$size = array('o','ko','Mo','Go','To','Po','Eo','Zo','Yo');
+		    $factor = floor((strlen($nFileSize) - 1) / 3);
+		    return sprintf("%.{$decimals}f", $nFileSize / pow(1000, $factor)) . @$size[$factor];
+		} else {
+			return $nFileSize;
+		}
 	}
 	
 	public function group($mNewGroup) {
@@ -150,12 +157,12 @@ class Pabana_File {
 		return $this;
 	}
 	
-	public function owner($sNewFileOwner) {
+	public function setOwner($sNewFileOwner) {
 		chown($this->sFilePath, $sNewFileOwner);
 		return $this;
 	}
 	
-	public function permission($nNewPermission) {
+	public function setPermission($nNewPermission) {
 		chmod($this->sFilePath, $nNewPermission);
 		return $this;
 	}

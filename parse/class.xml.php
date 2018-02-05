@@ -5,7 +5,7 @@ class Pabana_Parse_Xml {
 	function __construct($sFilePath) {
 		$oConfig = simplexml_load_file($sFilePath);
 		$jsonConfig = json_encode($oConfig);
-		$this->armConfig = json_decode($jsonConfig,TRUE);
+		$this->armConfig = json_decode($jsonConfig, TRUE);
     }
 	
 	function toArray() {

@@ -1,6 +1,6 @@
 <?php
-class Pabana_Localization {
-	public function changeCharset($mValue, $sInCharset, $sOutCharset, $bTranslit = true, $bIgnore = true) {
+Class Pabana_Intl_Charset {
+    public function changeCharset($mValue, $sInCharset, $sOutCharset, $bTranslit = true, $bIgnore = true) {
 		$mReturn = $mValue;
 		if(is_string($mValue)) {
 			if($bTranslit === true) {
@@ -18,10 +18,6 @@ class Pabana_Localization {
 			}
 		}
 		return $mReturn;
-	}
-	
-	public function setLocale($sValue) {
-		setlocale(LC_ALL, $sValue);
 	}
 }
 ?>

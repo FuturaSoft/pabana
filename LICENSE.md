@@ -1,4 +1,4 @@
-Copyright (c) 2014-2015, FuturaSoft.
+Copyright (c) 2014-2016, FuturaSoft.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
