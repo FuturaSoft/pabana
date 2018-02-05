@@ -25,24 +25,6 @@ class Access extends Connection {
             return true;
         }
     }
-	
-	public function getDsn() {
-		if($this->_checkParam()) {
-			$sDsn = 'odbc:Driver={' . $this->getDriver() . '};';
-            if(!empty($this->getUser())) {
-                $sDsn .= 'Uid=' . $this->getUser() . ';';
-            } else {
-                $sDsn .= 'Uid=Admin;';
-            }
-            $sDsn .= 'Pwd=' . $this->getPassword() . ';Dbq=' . $this->getDatabase() . ';';
-			if(!empty($this->getSystemDatabase())) {
-				$sDsn .= 'SystemDB=' . $this->getSystemDatabase() . ';';
-			}
-			return $sDsn;
-		} else {
-			return false;
-		}
-    }
 
     public function getDriver() {
         return $this->_sDriver;
@@ -84,7 +66,7 @@ class Access extends Connection {
         return $this;
     }
     
-    public function setSystemDatabase($sSystemDatabase) {
+    public function setSystemDatabase($sCnxSystemDatabase) {
         $this->_sSystemDatabase = $sSystemDatabase;
         return $this;
     }

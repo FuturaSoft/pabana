@@ -10,4 +10,3 @@ class Response {
 		return true;
 	}
 }
-?>

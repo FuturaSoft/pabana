@@ -24,8 +24,6 @@ class Mvc {
 		$this->Model = new Model();
 		// Load Mvc\View to $View var
 		$this->View = new View();
-		// Set default layout name
-		$this->Layout->setName(ucfirst(Configuration::get('layout.default')));
 		// Set default view name
 		$this->View->setName(ucfirst(Request::getAction()));
 	}

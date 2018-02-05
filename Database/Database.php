@@ -9,8 +9,6 @@ class Database {
 
 	public function connect($oConnection) {
 		try {
-            //echo $oConnection->getDsn();
-            //exit();
 			self::$oPdo = new \PDO($oConnection->getDsn(), $oConnection->getUser(), $oConnection->getPassword(), $oConnection->getOption());
 		}
         catch (PDOException $e) {

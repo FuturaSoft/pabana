@@ -36,7 +36,7 @@ class Css {
 		return $this;
 	}
 
-		public function render() {
+	public function render() {
 		$sHtml = '';
 		foreach(self::$_arsCssList as $arsCss) {
 			$sHtml .= '<link href="' . $arsCss[0] . '" rel="stylesheet" type="text/css"';
@@ -48,4 +48,3 @@ class Css {
 		return $sHtml;
 	}
 }
-?>

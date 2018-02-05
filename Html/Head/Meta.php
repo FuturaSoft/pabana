@@ -73,4 +73,3 @@ class Meta {
 		return $this->set('viewport', $sViewport);
 	}
 }
-?>

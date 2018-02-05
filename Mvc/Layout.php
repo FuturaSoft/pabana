@@ -31,6 +31,8 @@ class Layout {
 		$this->setExtension(Configuration::get('layout.extension'));
 		// Set prefix from configuration
 		$this->setPrefix(Configuration::get('layout.prefix'));
+		// Set default layout name
+		$this->setName(ucfirst(Configuration::get('layout.default')));
 	}
 
 	public function __toString() {
@@ -68,12 +70,7 @@ class Layout {
 	}
 
 	public function getVar($sVarName) {
-		if(isset(self::$_armVariable[$sVarName])) {
-			return self::$_armVariable[$sVarName];
-		} else {
-			throw new Error("Variable '" . $sVarName . "' isn't defined in Layout.");
-			return false;
-		}
+		return self::$_armVariable[$sVarName];
 	}
 
 	public function render() {
@@ -81,6 +78,7 @@ class Layout {
 	}
 
 	public function renderInit() {
+		$this->Html->clean();
 		$sInitPath = $this->getDirectory() . '/' . $this->getName() . '/' . $this->getPrefix() . 'init.' . $this->getExtension();
 		require($sInitPath);
 	}
@@ -100,12 +98,8 @@ class Layout {
 		return true;
 	}
 
-	public function setName($sName, $bCleanRender = true) {
+	public function setName($sName) {
 		self::$sName = $sName;
-		if($bCleanRender) {
-			$this->Html->clean();
-			$this->renderInit();
-		}
 		return true;
 	}
 

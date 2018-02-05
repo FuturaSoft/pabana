@@ -7,7 +7,6 @@ class Connection {
     protected $_sCharset;
     protected $_sDatabase;
     protected $_sDbms = null;
-	protected $_sName;
     protected $_sPassword;
     protected $_sUser;
 
@@ -21,10 +20,6 @@ class Connection {
 
     public function getOption() {
         return array();
-    }
-	
-	public function getName() {
-        return $this->_sName;
     }
 
     public function getPassword() {
@@ -50,11 +45,6 @@ class Connection {
         return $this;
     }
 
-	public function setName($sName) {
-        $this->_sName = $sName;
-        return $this;
-    }
-	
     public function setPassword($sPassword) {
         $this->_sPassword = $sPassword;
         return $this;

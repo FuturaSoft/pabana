@@ -38,4 +38,3 @@ class Title {
 		return $this->append($sTitle);
 	}
 }
-?>

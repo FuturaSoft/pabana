@@ -1,9 +1,12 @@
 # CHANGELOG
 
-## 0.2.0.0 (When It's Done)
+## 1.0.0.0 "Banana" - 08/06/2017
 
-- In progress
-
-## 0.1.0.0 (2016-08-19)
-
-- Initial commit
+NEW : Core module add
+NEW : Database module add (Access, MySQL)
+NEW : Debug module add
+NEW : Filesystem module add
+NEW : Html module add
+NEW : MVC module add
+NEW : Network module add
+NEW : Router module add

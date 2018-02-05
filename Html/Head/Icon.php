@@ -34,4 +34,3 @@ class Icon {
 		return $sHtml;
 	}
 }
-?>

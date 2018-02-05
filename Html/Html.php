@@ -23,4 +23,3 @@ class Html {
 		$this->Script->clean();
 	}
 }
-?>

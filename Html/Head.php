@@ -50,4 +50,3 @@ class Head {
 		return $sHtml;
 	}
 }
-?>

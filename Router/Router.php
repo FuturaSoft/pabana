@@ -173,4 +173,3 @@ Class Router {
 		return $arsListValue;
 	}
 }
-?>

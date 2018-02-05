@@ -5,9 +5,8 @@ use Pabana\Core\Configuration;
 use Pabana\Debug\Error;
 use Pabana\Network\Request;
 
-const PE_VERSION = '1.0.0.0';
+const PE_VERSION = '1.0.0';
 const PE_PHP_MIN_VERSION = '5.5';
-const E_NO = 0;
 
 class Core {
 

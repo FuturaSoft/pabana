@@ -56,4 +56,3 @@ class Script {
 		return $sHtml;
 	}
 }
-?>

@@ -36,4 +36,3 @@ Class Route {
 		return $this->_arsParamList;
 	}
 }
-?>

@@ -172,4 +172,3 @@ class File {
 		clearstatcache($bAll, $this->_sPath);
 	}
 }
-?>
