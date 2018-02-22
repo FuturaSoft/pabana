@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.7 "Banana" - 22/02/2018
+
+FIX : [Global] : Fix for PSR-2 respect
+FIX : [Mvc] : Fix page loading even action doesn't exist in controller if view exist
+
 ## 1.0.6 "Banana" - 21/02/2018
 
 FIX : [Network] : Correct X-Mailer tag in Mail class (regressception :\ )

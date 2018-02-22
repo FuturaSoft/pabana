@@ -1,6 +1,6 @@
 ![Logo](https://pabana.futurasoft.fr/img/logo_github.png)
 
-# Welcome to the *Pabana 1.0.6 "Banana"*!
+# Welcome to the *Pabana 1.0.7 "Banana"*!
 
 ## ABOUT PABANA
 
@@ -9,11 +9,12 @@ A modern framework compatible with PHP 5.6+ who give you a simple MVC and much m
 
 ## RELEASE INFORMATION
 
-*Pabana 1.0.6 "Banana"*
+*Pabana 1.0.7 "Banana"*
 
-* Fix X-Mailer tag for Mail Class
+* Fix for PSR-2 respect
+* Fix page loading even action doesn't exist in controller if view exist
 
-### UPDATES IN 1.0.6
+### UPDATES IN 1.0.7
 
 Please see [CHANGELOG.md](CHANGELOG.md).  
 Or on Pabana website [Changelog](https://pabana.futurasoft.fr/about/changelog/).
