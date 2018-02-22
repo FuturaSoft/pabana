@@ -12,7 +12,6 @@ A modern framework compatible with PHP 5.6+ who give you a simple MVC and much m
 *Pabana 1.0.7 "Banana"*
 
 * Fix for PSR-2 respect
-* Fix page loading even action doesn't exist in controller if view exist
 
 ### UPDATES IN 1.0.7
 
