@@ -428,7 +428,8 @@ class Mail
         } else {
             $sContentType = 'multipart/alternative';
         }
-        $sHeaderContent .= 'Content-Type: ' . $sContentType . '; boundary="' . $this->sBoundary . '"' . PHP_EOL . PHP_EOL;
+        $sHeaderContent .= 'Content-Type: ' . $sContentType . '; ';
+        $sHeaderContent .= 'boundary="' . $this->sBoundary . '"' . PHP_EOL . PHP_EOL;
         return $sHeaderContent;
     }
     

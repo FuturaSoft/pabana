@@ -25,7 +25,7 @@ class Css
      * @var     array List of defined css
      * @since   1.0.0
      */
-    private static $_arsCssList = array();
+    private static $arsCssList = array();
 
     /**
      * toString
@@ -52,7 +52,7 @@ class Css
      */
     public function appendFile($sHref, $sMedia = null)
     {
-        self::$_arsCssList[] = array('/css/' . $sHref, $sMedia);
+        self::$arsCssList[] = array('/css/' . $sHref, $sMedia);
         return $this;
     }
 
@@ -69,7 +69,7 @@ class Css
      */
     public function appendLibrary($sLibrary, $sHref, $sMedia = null)
     {
-        self::$_arsCssList[] = array('/lib/' . $sLibrary . '/css/' . $sHref, $sMedia);
+        self::$arsCssList[] = array('/lib/' . $sLibrary . '/css/' . $sHref, $sMedia);
         return $this;
     }
 
@@ -83,7 +83,7 @@ class Css
      */
     public function clean()
     {
-        self::$_arsCssList = array();
+        self::$arsCssList = array();
         return $this;
     }
 
@@ -100,7 +100,7 @@ class Css
     public function prependFile($sHref, $sMedia = null)
     {
         $arsCss = array('/css/' . $sHref, $sMedia);
-        array_unshift(self::$_arsCssList, $arsCss);
+        array_unshift(self::$arsCssList, $arsCss);
         return $this;
     }
 
@@ -117,7 +117,7 @@ class Css
      */
     public function prependLibrary($sLibrary, $sHref, $sMedia = null)
     {
-        self::$_arsCssList[] = array('/lib/' . $sLibrary . '/css/' . $sHref, $sMedia);
+        self::$arsCssList[] = array('/lib/' . $sLibrary . '/css/' . $sHref, $sMedia);
         return $this;
     }
 
@@ -132,7 +132,7 @@ class Css
     public function render()
     {
         $sHtml = '';
-        foreach (self::$_arsCssList as $arsCss) {
+        foreach (self::$arsCssList as $arsCss) {
             $sHtml .= '<link href="' . $arsCss[0] . '" rel="stylesheet" type="text/css"';
             if (!empty($arsCss[1])) {
                 $sHtml .= ' media="' . $arsCss[1] . '"';

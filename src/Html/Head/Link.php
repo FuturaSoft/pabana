@@ -25,7 +25,7 @@ class Link
      * @var     array List of defined link
      * @since   1.0.0
      */
-    private static $_arsLinkList = array();
+    private static $arsLinkList = array();
 
     /**
      * toString
@@ -54,7 +54,7 @@ class Link
      */
     public function append($sHref, $sRel = null, $sType = null, $sMedia = null)
     {
-        self::$_arsLinkList[] = array($sHref, $sRel, $sType, $sMedia);
+        self::$arsLinkList[] = array($sHref, $sRel, $sType, $sMedia);
         return $this;
     }
 
@@ -68,7 +68,7 @@ class Link
      */
     public function clean()
     {
-        self::$_arsLinkList = array();
+        self::$arsLinkList = array();
         return $this;
     }
 
@@ -87,7 +87,7 @@ class Link
     public function prepend($sHref, $sRel = null, $sType = null, $sMedia = null)
     {
         $arsLink = array($sHref, $sRel, $sType, $sMedia);
-        array_unshift(self::$_arsLinkList, $arsLink);
+        array_unshift(self::$arsLinkList, $arsLink);
         return $this;
     }
 
@@ -102,7 +102,7 @@ class Link
     public function render()
     {
         $sHtml = '';
-        foreach (self::$_arsLinkList as $arsLink) {
+        foreach (self::$arsLinkList as $arsLink) {
             $sHtml .= '<link href="' . $arsLink[0] . '"';
             if (!empty($arsLink[1])) {
                 $sHtml .= ' rel="' . $arsLink[1] . '"';

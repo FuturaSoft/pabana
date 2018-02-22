@@ -25,25 +25,25 @@ class Route
      * @var    string Route
      * @since   1.0.0
      */
-    private $_sRoute = null;
+    private $sRoute = null;
 
     /**
      * @var    string Redirect controller
      * @since   1.0.0
      */
-    private $_sController = 'index';
+    private $sController = 'index';
 
     /**
      * @var    string Redirect action
      * @since   1.0.0
      */
-    private $_sAction = 'index';
+    private $sAction = 'index';
 
     /**
      * @var    string Redirect param list
      * @since   1.0.0
      */
-    private $_arsParamList = null;
+    private $arsParamList = null;
 
     /**
      * Create an object Route from parameters
@@ -54,15 +54,15 @@ class Route
      */
     public function __construct($sRoute, $arsOption = array())
     {
-        $this->_sRoute = $sRoute;
+        $this->sRoute = $sRoute;
         if (isset($arsOption['controller'])) {
-            $this->_sController = $arsOption['controller'];
+            $this->sController = $arsOption['controller'];
         }
         if (isset($arsOption['action'])) {
-            $this->_sAction = $arsOption['action'];
+            $this->sAction = $arsOption['action'];
         }
         if (isset($arsOption['param'])) {
-            $this->_arsParamList = $arsOption['param'];
+            $this->arsParamList = $arsOption['param'];
         }
     }
 
@@ -74,7 +74,7 @@ class Route
      */
     public function getRoute()
     {
-        return $this->_sRoute;
+        return $this->sRoute;
     }
 
     /**
@@ -85,7 +85,7 @@ class Route
      */
     public function getController()
     {
-        return $this->_sController;
+        return $this->sController;
     }
 
     /**
@@ -96,7 +96,7 @@ class Route
      */
     public function getAction()
     {
-        return $this->_sAction;
+        return $this->sAction;
     }
 
     /**
@@ -107,6 +107,6 @@ class Route
      */
     public function getParamList()
     {
-        return $this->_arsParamList;
+        return $this->arsParamList;
     }
 }

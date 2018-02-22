@@ -21,7 +21,7 @@ namespace Pabana\Network\Http;
  */
 class Request
 {
-	/**
+    /**
      * Check accept field
      *
      * @since   1.0.0
@@ -117,7 +117,7 @@ class Request
      * Get domain
      *
      * @since   1.0.0
-     * @param  	string $nTldLength Length of Top Level Domain. (by default 1)
+     * @param   string $nTldLength Length of Top Level Domain. (by default 1)
      * @return  string Return domain.
      */
     public function domain($nTldLength = 1)
@@ -153,7 +153,7 @@ class Request
      * Parse accept type line
      *
      * @since   1.0.0
-     * @param  	string $sHeaderLine Accept header line.
+     * @param   string $sHeaderLine Accept header line.
      * @return  array Return sort accept value.
      */
     private function parseAccept($sHeaderLine)
@@ -215,7 +215,7 @@ class Request
      * Get subdomain
      *
      * @since   1.0.0
-     * @param  	string $nTldLength Length of Top Level Domain. (by default 1)
+     * @param   string $nTldLength Length of Top Level Domain. (by default 1)
      * @return  string Return subdomain.
      */
     public function subdomain($nTldLength = 1)
@@ -250,7 +250,7 @@ class Request
      * Check method, ajax, json and xml
      *
      * @since   1.0.0
-     * @param  	string $sTest Type of test (get, put, patch, post, delete, head, options, ajax, json, xml)
+     * @param   string $sTest Type of test (get, put, patch, post, delete, head, options, ajax, json, xml)
      * @return  bool Return true if test is ok or return false.
      */
     public function is($sTest)
@@ -263,7 +263,8 @@ class Request
                 return false;
             }
         } elseif ($sTest == 'ajax') {
-            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+                strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
                 return true;
             } else {
                 return false;

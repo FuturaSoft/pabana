@@ -25,7 +25,7 @@ class Title
      * @var     array Title of page.
      * @since   1.0.0
      */
-    private static $_arsTitle = array();
+    private static $arsTitle = array();
 
     /**
      * toString
@@ -51,7 +51,7 @@ class Title
      */
     public function append($sTitle)
     {
-        self::$_arsTitle[] = $sTitle;
+        self::$arsTitle[] = $sTitle;
         return $this;
     }
 
@@ -65,7 +65,7 @@ class Title
      */
     public function clean()
     {
-        self::$_arsTitle = array();
+        self::$arsTitle = array();
         return $this;
     }
 
@@ -80,7 +80,7 @@ class Title
      */
     public function prepend($sTitle)
     {
-        array_unshift(self::$_arsTitle, $sTitle);
+        array_unshift(self::$arsTitle, $sTitle);
         return $this;
     }
 
@@ -94,8 +94,8 @@ class Title
      */
     public function render()
     {
-        if (!empty(self::$_arsTitle)) {
-            return '<title>' . implode('', self::$_arsTitle) . '</title>' . PHP_EOL;
+        if (!empty(self::$arsTitle)) {
+            return '<title>' . implode('', self::$arsTitle) . '</title>' . PHP_EOL;
         } else {
             return false;
         }

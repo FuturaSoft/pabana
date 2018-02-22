@@ -24,7 +24,7 @@ use Pabana\Parser\Ini;
 class Configuration
 {
     /**
-     * @var    Array Array to store configuration parameters
+     * @var     Array Array to store configuration parameters
      * @since   1.0.0
      */
     private static $armConfig = array();
@@ -35,7 +35,7 @@ class Configuration
      * This method defined default key and value for using Pabana
      *
      * @since   1.0.0
-     * @return 	void
+     * @return  void
      */
     public static function base()
     {
@@ -93,8 +93,8 @@ class Configuration
      * This method is used to check if a key exists in Configuration
      *
      * @since   1.0.0
-     * @param 	string $sKey Key to check.
-     * @return 	bool True if key exists else false
+     * @param   string $sKey Key to check.
+     * @return  bool True if key exists else false
      */
     public static function check($sKey)
     {
@@ -108,8 +108,8 @@ class Configuration
      * A parameter allow to reload base configuration
      *
      * @since   1.0.0
-     * @param 	bool $bReloadBase If true reload base configuration
-     * @return 	bool Result of cleaning
+     * @param   bool $bReloadBase If true reload base configuration
+     * @return  bool Result of cleaning
      */
     public static function clean($bReloadBase = true)
     {
@@ -128,8 +128,8 @@ class Configuration
      * Key existance is checked first
      *
      * @since   1.0.0
-     * @param 	string $sKey Key to delete.
-     * @return 	bool Result of delete Key
+     * @param   string $sKey Key to delete.
+     * @return  bool Result of delete Key
      */
     public static function delete($sKey)
     {
@@ -149,9 +149,9 @@ class Configuration
      * Load a configuration file
      *
      * @since   1.0.0
-     * @param 	string $sFilename File path of loaded file.
+     * @param   string $sFilename File path of loaded file.
      * @param   bool $bMerge If true merge current config to new config.
-     * @return 	void
+     * @return  void
      */
     public static function load($sFilename, $bMerge = true)
     {
@@ -165,7 +165,9 @@ class Configuration
         $arsAllowedFiletype = array('ini', 'json', 'php', 'xml');
         // Check if extension is recognized
         if (!in_array($sFiletype, $arsAllowedFiletype)) {
-            throw new Exception('Config file "' . $sFilename . '" is in unrecognize format. Accepted format are ' . implode(', ', $arsAllowedFiletype) . '.');
+            $sErrorMessage = 'Config file "' . $sFilename . '" is in unrecognize format. Accepted format are ';
+            $sErrorMessage .= implode(', ', $arsAllowedFiletype) . '.';
+            throw new Exception($sErrorMessage);
         }
         // Load file and put in array
         if ($sFiletype === 'ini') {
@@ -199,9 +201,9 @@ class Configuration
      * For exemple change 'true' string to true boolean
      *
      * @since   1.0.0
-     * @param 	string $sKey Key to prepare
-     * @param 	mixed $mValue Value to prepare.
-     * @return 	mixed Value prepared
+     * @param   string $sKey Key to prepare
+     * @param   mixed $mValue Value to prepare.
+     * @return  mixed Value prepared
      */
     public static function prepare($sKey, $mValue)
     {
@@ -224,8 +226,8 @@ class Configuration
      * Parse array and prepare all of their value
      *
      * @since   1.0.0
-     * @param 	array $armArray Array of key and value to prepare
-     * @return 	array Array of key and value prepared
+     * @param   array $armArray Array of key and value to prepare
+     * @return  array Array of key and value prepared
      */
     public static function prepareArray($armArray)
     {
@@ -243,8 +245,8 @@ class Configuration
      * Key existance is checked first
      *
      * @since   1.0.0
-     * @param 	string $sKey Key to read.
-     * @return 	mixed|bool Value of Configuration parameter or false if configuration key doesn't exist
+     * @param   string $sKey Key to read.
+     * @return  mixed|bool Value of Configuration parameter or false if configuration key doesn't exist
      */
     public static function read($sKey)
     {
@@ -263,7 +265,7 @@ class Configuration
      * This method is used to get collection of configuration
      *
      * @since   1.0.0
-     * @return 	array Array of all configuration
+     * @return  array Array of all configuration
      */
     public static function readAll()
     {
@@ -302,7 +304,7 @@ class Configuration
      * Return current version of Pabana
      *
      * @since   1.0.0
-     * @return 	string Current version of Pabana
+     * @return  string Current version of Pabana
      */
     public static function version()
     {
@@ -316,9 +318,9 @@ class Configuration
      * First value is prepare by prepare method
      *
      * @since   1.0.0
-     * @param 	string $sKey Key to read.
-     * @param 	string $mValue Value of key.
-     * @return 	void
+     * @param   string $sKey Key to read.
+     * @param   string $mValue Value of key.
+     * @return  void
      */
     public static function write($sKey, $mValue)
     {

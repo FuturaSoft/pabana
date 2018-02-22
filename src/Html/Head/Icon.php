@@ -25,7 +25,7 @@ class Icon
      * @var     array List of defined icon
      * @since   1.0.0
      */
-    private static $_arsIconList = array();
+    private static $arsIconList = array();
 
     /**
      * toString
@@ -51,7 +51,7 @@ class Icon
      */
     public function append($sHref)
     {
-        self::$_arsIconList[] = array('/img/' . $sHref);
+        self::$arsIconList[] = array('/img/' . $sHref);
         return $this;
     }
 
@@ -65,7 +65,7 @@ class Icon
      */
     public function clean()
     {
-        self::$_arsIconList = array();
+        self::$arsIconList = array();
         return $this;
     }
 
@@ -81,7 +81,7 @@ class Icon
     public function prepend($sHref)
     {
         $arsIcon = array('/img/' . $sHref);
-        array_unshift(self::$_arsIconList, $arsIcon);
+        array_unshift(self::$arsIconList, $arsIcon);
         return $this;
     }
 
@@ -96,7 +96,7 @@ class Icon
     public function render()
     {
         $sHtml = '';
-        foreach (self::$_arsIconList as $arsIcon) {
+        foreach (self::$arsIconList as $arsIcon) {
             $sHtml .= '<link href="' . $arsIcon[0] . '" rel="icon">' . PHP_EOL;
         }
         return $sHtml;

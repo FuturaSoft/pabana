@@ -38,12 +38,12 @@ class Statement
         $this->oStatement = $oStatement;
     }
     
-    public function bindParam($mParameter, $mValue, $nDataType =  null, $nValueLength = null)
+    public function bindParam($mParameter, $mValue, $nDataType = null, $nValueLength = null)
     {
         return $this->oStatement->bindParam($mParameter, $mValue, $nDataType, $nValueLength);
     }
     
-    public function bindValue($mParameter, $mValue, $nDataType =  null)
+    public function bindValue($mParameter, $mValue, $nDataType = null)
     {
         return $this->oStatement->bindValue($mParameter, $mValue, $nDataType);
     }

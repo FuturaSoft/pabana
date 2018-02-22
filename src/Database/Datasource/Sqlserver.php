@@ -57,7 +57,7 @@ class Sqlserver extends Datasource
      *
      * @since   1.0.0
      * @return  bool True if success or false.
-     */    
+     */
     protected function checkParam()
     {
         if (empty($this->getHost())) {

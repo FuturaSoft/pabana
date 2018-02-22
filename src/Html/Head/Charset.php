@@ -27,7 +27,7 @@ class Charset
      * @var     string Charset (by default UTF-8).
      * @since   1.0.0
      */
-    private static $_sCharset = 'UTF-8';
+    private static $sCharset = 'UTF-8';
 
     /**
      * toString
@@ -52,7 +52,7 @@ class Charset
      */
     public function clean()
     {
-        self::$_sCharset = 'UTF-8';
+        self::$sCharset = 'UTF-8';
     }
 
     /**
@@ -83,18 +83,21 @@ class Charset
             'MACROMAN' => 'x-mac-roman'
         );
         $arsKeyCharset = array_keys($arsCharset);
-        if (!in_array(self::$_sCharset, $arsKeyCharset)) {
-            $sErrorMessage = 'Charset ' . self::$_sCharset . ' isn\'t defined';
+        if (!in_array(self::$sCharset, $arsKeyCharset)) {
+            $sErrorMessage = 'Charset ' . self::$sCharset . ' isn\'t defined';
             throw new \Exception($sErrorMessage);
         } else {
             if ($oDoctype->get() == 'HTML5') {
-                return '<meta charset="' . $arsCharset[self::$_sCharset] . '">' . PHP_EOL;
+                return '<meta charset="' . $arsCharset[self::$sCharset] . '">' . PHP_EOL;
             } else {
+                $meta = '<meta http-equiv="Content-Type" content="';
                 if (substr($oDoctype->get(), 0, 1) == 'X') {
-                    return '<meta http-equiv="Content-Type" content="text/html; charset=' . $arsCharset[self::$_sCharset] . '" />' . PHP_EOL;
+                    $meta .= 'text/html; charset=' . $arsCharset[self::$sCharset];
                 } else {
-                    return '<meta http-equiv="Content-Type" content="text/html; charset=' . $arsCharset[self::$_sCharset] . '">' . PHP_EOL;
+                    $meta .= 'text/html; charset=' . $arsCharset[self::$sCharset];
                 }
+                $meta .= '" />' . PHP_EOL;
+                return $meta;
             }
         }
     }
@@ -110,7 +113,7 @@ class Charset
      */
     public function set($sCharset)
     {
-        self::$_sCharset = $sCharset;
+        self::$sCharset = $sCharset;
         return $this;
     }
 }

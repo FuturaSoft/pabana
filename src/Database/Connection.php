@@ -76,9 +76,9 @@ class Connection
         try {
             $this->oPdo = new \PDO(
                 $this->Datasource->getDsn(),
-                                   $this->Datasource->getUser(),
-                                   $this->Datasource->getPassword(),
-                                   $this->Datasource->getOption()
+                $this->Datasource->getUser(),
+                $this->Datasource->getPassword(),
+                $this->Datasource->getOption()
             );
             return true;
         } catch (PDOException $e) {
@@ -110,7 +110,7 @@ class Connection
     /**
      * Execute an SQL statement
      *
-     * Execute an SQL statement and return the number of affected rows 
+     * Execute an SQL statement and return the number of affected rows
      *
      * @since   1.0.0
      * @param   string $sQuery SQL Statement.
@@ -196,7 +196,7 @@ class Connection
     /**
      * Executes an SQL statement and return result
      *
-     * Executes an SQL statement, returning a result set as a \Pabana\Database\Statement object 
+     * Executes an SQL statement, returning a result set as a \Pabana\Database\Statement object
      *
      * @since   1.0.0
      * @param   string $sQuery SQL Statement.

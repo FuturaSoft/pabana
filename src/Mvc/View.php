@@ -77,7 +77,9 @@ class View
         // Set auto render status from configuration
         $this->setAutoRender(Configuration::read('mvc.view.auto_render'));
         // Set default directory for view
-        $sDirectory = Configuration::read('application.path') . Configuration::read('mvc.view.path') . '/' . Router::getController();
+        $applicationPath = Configuration::read('application.path');
+        $viewPath = Configuration::read('mvc.view.path');
+        $sDirectory = $applicationPath . $viewPath . '/' . Router::getController();
         $this->setDirectory($sDirectory);
         // Set extension from configuration
         $this->setExtension(Configuration::read('mvc.view.extension'));

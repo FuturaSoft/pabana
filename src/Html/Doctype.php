@@ -25,7 +25,7 @@ class Doctype
      * @var     string Doctype version (by default HTML5).
      * @since   1.0.0
      */
-    private static $_sDoctype = 'HTML5';
+    private static $sDoctype = 'HTML5';
 
     /**
      * toString
@@ -50,7 +50,7 @@ class Doctype
      */
     public function clean()
     {
-        return self::$_sDoctype = 'HTML5';
+        return self::$sDoctype = 'HTML5';
     }
 
     /**
@@ -63,7 +63,7 @@ class Doctype
      */
     public function get()
     {
-        return self::$_sDoctype;
+        return self::$sDoctype;
     }
 
     /**
@@ -76,23 +76,37 @@ class Doctype
      */
     public function render()
     {
-        if (self::$_sDoctype == 'HTML5') {
-            return '<!DOCTYPE html>' . PHP_EOL;
-        } elseif (self::$_sDoctype == 'XHTML11') {
-            return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">' . PHP_EOL;
-        } elseif (self::$_sDoctype == 'XHTML1_STRICT') {
-            return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . PHP_EOL;
-        } elseif (self::$_sDoctype == 'XHTML1_TRANSITIONAL') {
-            return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . PHP_EOL;
-        } elseif (self::$_sDoctype == 'XHTML1_FRAMESET') {
-            return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">' . PHP_EOL;
-        } elseif (self::$_sDoctype == 'HTML4_STRICT') {
-            return '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">' . PHP_EOL;
-        } elseif (self::$_sDoctype == 'HTML4_LOOSE') {
-            return '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">' . PHP_EOL;
-        } elseif (self::$_sDoctype == 'HTML4_FRAMESET') {
-            return '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">' . PHP_EOL;
+        if (self::$sDoctype == 'HTML5') {
+            $type = '';
+            $url = '';
+        } elseif (self::$sDoctype == 'XHTML11') {
+            $type = '-//W3C//DTD XHTML 1.1//EN';
+            $url = 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd';
+        } elseif (self::$sDoctype == 'XHTML1_STRICT') {
+            $type = '-//W3C//DTD XHTML 1.0 Strict//EN';
+            $url = 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd';
+        } elseif (self::$sDoctype == 'XHTML1_TRANSITIONAL') {
+            $type = '-//W3C//DTD XHTML 1.0 Transitional//EN';
+            $url = 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd';
+        } elseif (self::$sDoctype == 'XHTML1_FRAMESET') {
+            $type = '-//W3C//DTD XHTML 1.0 Frameset//EN';
+            $url = 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd';
+        } elseif (self::$sDoctype == 'HTML4_STRICT') {
+            $type = '-//W3C//DTD HTML 4.01//EN';
+            $url = 'http://www.w3.org/TR/html4/strict.dtd';
+        } elseif (self::$sDoctype == 'HTML4_LOOSE') {
+            $type = '-//W3C//DTD HTML 4.01 Transitional//EN';
+            $url = 'http://www.w3.org/TR/html4/loose.dtd';
+        } elseif (self::$sDoctype == 'HTML4_FRAMESET') {
+            $type = '-//W3C//DTD HTML 4.01 Frameset//EN';
+            $url = 'http://www.w3.org/TR/html4/frameset.dtd';
         }
+        $doctype = '<!DOCTYPE html';
+        if (!empty($type) && !empty($url)) {
+            $doctype .= ' PUBLIC "' . $type . '" "' . $url . '"';
+        }
+        $doctype .= '>' . PHP_EOL;
+        return $doctype;
     }
 
     /**
@@ -106,7 +120,7 @@ class Doctype
      */
     public function set($sDoctype)
     {
-        self::$_sDoctype = $sDoctype;
+        self::$sDoctype = $sDoctype;
         return $this;
     }
 }

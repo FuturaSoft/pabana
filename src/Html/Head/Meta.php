@@ -25,13 +25,13 @@ class Meta
      * @var     array List of defined meta http-equiv
      * @since   1.0.0
      */
-    private static $_arsHttpEquiv = array();
+    private static $arsHttpEquiv = array();
 
     /**
      * @var     array List of defined default meta
      * @since   1.0.0
      */
-    private static $_arsMeta = array();
+    private static $arsMeta = array();
 
     /**
      * toString
@@ -56,8 +56,8 @@ class Meta
      */
     public function clean()
     {
-        self::$_arsHttpEquiv = array();
-        self::$_arsMeta = array();
+        self::$arsHttpEquiv = array();
+        self::$arsMeta = array();
     }
 
     /**
@@ -71,10 +71,10 @@ class Meta
     public function render()
     {
         $sHtml = '';
-        foreach (self::$_arsHttpEquiv as $sHttpEquivName => $sHttpEquivValue) {
+        foreach (self::$arsHttpEquiv as $sHttpEquivName => $sHttpEquivValue) {
             $sHtml .= '<meta http-equiv="' . $sHttpEquivName . '" content="' . $sHttpEquivValue . '">' . PHP_EOL;
         }
-        foreach (self::$_arsMeta as $sMetaName => $sMetaValue) {
+        foreach (self::$arsMeta as $sMetaName => $sMetaValue) {
             $sHtml .= '<meta name="' . $sMetaName . '" content="' . $sMetaValue . '">' . PHP_EOL;
         }
         return $sHtml;
@@ -90,7 +90,7 @@ class Meta
      */
     public function set($sMetaName, $sMetaValue)
     {
-        self::$_arsMeta[$sMetaName] = $sMetaValue;
+        self::$arsMeta[$sMetaName] = $sMetaValue;
         return $this;
     }
 
@@ -164,7 +164,7 @@ class Meta
      */
     public function setHttpEquiv($sHttpEquivName, $sHttpEquivValue)
     {
-        self::$_arsHttpEquiv[$sHttpEquivName] = $sHttpEquivValue;
+        self::$arsHttpEquiv[$sHttpEquivName] = $sHttpEquivValue;
         return $this;
     }
 

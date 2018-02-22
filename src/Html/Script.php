@@ -25,7 +25,7 @@ class Script
      * @var     array List of defined script
      * @since   1.0.0
      */
-    private static $_arsScriptList = array();
+    private static $arsScriptList = array();
 
     /**
      * toString
@@ -51,7 +51,7 @@ class Script
      */
     public function append($sHref)
     {
-        self::$_arsScriptList[] = array($sHref);
+        self::$arsScriptList[] = array($sHref);
         return $this;
     }
 
@@ -66,7 +66,7 @@ class Script
      */
     public function appendFile($sHref)
     {
-        self::$_arsScriptList[] = array('/js/' . $sHref);
+        self::$arsScriptList[] = array('/js/' . $sHref);
         return $this;
     }
 
@@ -82,7 +82,7 @@ class Script
      */
     public function appendLibrary($sLibrary, $sHref)
     {
-        self::$_arsScriptList[] = array('/lib/' . $sLibrary . '/js/' . $sHref);
+        self::$arsScriptList[] = array('/lib/' . $sLibrary . '/js/' . $sHref);
         return $this;
     }
 
@@ -96,7 +96,7 @@ class Script
      */
     public function clean()
     {
-        self::$_arsScriptList = array();
+        self::$arsScriptList = array();
         return $this;
     }
 
@@ -112,7 +112,7 @@ class Script
     public function prepend($sHref)
     {
         $arsScript = array($sHref);
-        array_unshift(self::$_arsScriptList, $arsScript);
+        array_unshift(self::$arsScriptList, $arsScript);
         return $this;
     }
 
@@ -128,7 +128,7 @@ class Script
     public function prependFile($sHref)
     {
         $arsScript = array('/js/' . $sHref);
-        array_unshift(self::$_arsScriptList, $arsScript);
+        array_unshift(self::$arsScriptList, $arsScript);
         return $this;
     }
 
@@ -145,7 +145,7 @@ class Script
     public function prependLibrary($sLibrary, $sHref)
     {
         $arsScript = array('/lib/' . $sLibrary . '/js/' . $sHref);
-        array_unshift(self::$_arsScriptList, $arsScript);
+        array_unshift(self::$arsScriptList, $arsScript);
         return $this;
     }
 
@@ -160,7 +160,7 @@ class Script
     public function render()
     {
         $sHtml = '';
-        foreach (self::$_arsScriptList as $arsScript) {
+        foreach (self::$arsScriptList as $arsScript) {
             $sHtml .= '<script src="' . $arsScript[0] . '" type="text/javascript"></script>' . PHP_EOL;
         }
         return $sHtml;

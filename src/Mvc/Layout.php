@@ -278,7 +278,7 @@ class Layout
      * @since   1.0.0
      * @param   string $sVarName Name of var send to Layout
      * @param   string $sVarValue Value of var send to Layout
-     * @return  bool Return true if success else false 
+     * @return  bool Return true if success else false
      */
     public function setVar($sVarName, $sVarValue)
     {
